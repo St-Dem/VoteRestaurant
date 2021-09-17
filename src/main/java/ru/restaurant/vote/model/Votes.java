@@ -20,10 +20,11 @@ import java.time.LocalDate;
 @Setter
 @ToString(callSuper = true, exclude = {"user", "restaurant"})
 @Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date"}, name = "votes_unique_user_date_idx")})
+@NamedEntityGraph(name = Votes.RESTAURANT,  attributeNodes = @NamedAttributeNode("restaurant"))
 public class Votes extends BaseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-
+    public static final String RESTAURANT = "Votes.restaurant";
     @NotNull
     @Column(name = "date", nullable = false, columnDefinition = "date default now()")
     private LocalDate date;
