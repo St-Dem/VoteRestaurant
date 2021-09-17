@@ -1,5 +1,6 @@
 package ru.restaurant.vote.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -15,17 +16,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(callSuper = true, exclude = {"password"})
+@ToString(callSuper = true, exclude = {"password", "votes"})
 public class User extends NamedEntity implements HasIdAndEmail, Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -60,6 +58,11 @@ public class User extends NamedEntity implements HasIdAndEmail, Serializable {
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OrderBy("date DESC")
+    @JsonIgnore
+    protected List<Votes> votes;
 
     public User(User u) {
         this(u.id, u.name, u.email, u.password, u.enabled, u.registered, u.roles);
