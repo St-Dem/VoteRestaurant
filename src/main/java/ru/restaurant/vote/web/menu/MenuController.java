@@ -15,6 +15,7 @@ import java.util.List;
 
 import static ru.restaurant.vote.util.CreateUtil.create;
 import static ru.restaurant.vote.util.validation.ValidationUtil.assureIdConsistent;
+import static ru.restaurant.vote.web.SecurityUtil.authId;
 
 @RestController
 @RequestMapping(value = MenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -40,7 +41,7 @@ public class MenuController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
-        log.info("delete menu {} ", id);
+        log.info("delete menu {} user {}", id, authId());
         menuRepository.delete(id);
     }
 
@@ -52,14 +53,14 @@ public class MenuController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Menu> createWithLocation(@Valid @RequestBody Menu menu) {
-        log.info("create {}", menu);
+        log.info("create {} user {}", menu, authId());
         return create(menu, REST_URL, menuRepository::save);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Menu menu, @PathVariable int id) {
-        log.info("update {} with id={}", menu, id);
+        log.info("update {} with id={} user {}", menu, id, authId());
         assureIdConsistent(menu, id);
         menuRepository.save(menu);
     }

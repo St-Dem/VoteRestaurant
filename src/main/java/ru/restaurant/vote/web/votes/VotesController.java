@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.restaurant.vote.model.Votes;
 import ru.restaurant.vote.repository.VotesRepository;
-import ru.restaurant.vote.util.InvalidTimeUtil;
 import ru.restaurant.vote.util.validation.InvalidTime;
 import ru.restaurant.vote.web.SecurityUtil;
 
@@ -24,7 +23,7 @@ import static ru.restaurant.vote.util.validation.ValidationUtil.assureIdConsiste
 @Slf4j
 @AllArgsConstructor
 public class VotesController {
-    public static final String REST_URL = "/api/dishes";
+    public static final String REST_URL = "/api/votes";
 
     private final VotesRepository votesRepository;
 

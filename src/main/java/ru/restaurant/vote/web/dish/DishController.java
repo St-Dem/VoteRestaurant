@@ -14,6 +14,7 @@ import java.util.List;
 
 import static ru.restaurant.vote.util.CreateUtil.create;
 import static ru.restaurant.vote.util.validation.ValidationUtil.assureIdConsistent;
+import static ru.restaurant.vote.web.SecurityUtil.authId;
 
 @RestController
 @RequestMapping(value = DishController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -26,33 +27,33 @@ public class DishController {
 
     @GetMapping("/{id}")
     public Dish get(@PathVariable int id) {
-        log.info("get dishById {} ", id);
+        log.info("get dishById {}", id);
         return dishRepository.findById(id).orElse(null);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
-        log.info("delete dish {} ", id);
+        log.info("delete dish {} user {}", id, authId());
         dishRepository.delete(id);
     }
 
     @GetMapping
     public List<Dish> getAll() {
-        log.info("get all dishes");
+        log.info("get all dishes ");
         return dishRepository.findAll();
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Dish> createWithLocation(@Valid @RequestBody Dish dish) {
-        log.info("create {}", dish);
+        log.info("create {} user {}", dish, authId());
         return create(dish, REST_URL, dishRepository::save);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Dish dish, @PathVariable int id) {
-        log.info("update {} with id={}", dish, id);
+        log.info("update {} with id={} user {}", dish, id, authId());
         assureIdConsistent(dish, id);
         dishRepository.save(dish);
     }
