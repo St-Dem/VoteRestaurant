@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(columnNames = {"description", "menu_id"}, name = "dish_unique_menu_idx")})
+@Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(columnNames = {"name"}, name = "dish_unique_name_idx")})
 public class Dish extends NamedEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @NamedEntityGraph(name = Menu.RESTAURANT_AND_DISH,
         attributeNodes = {@NamedAttributeNode("restaurant"), @NamedAttributeNode("dish")})
-@Table(name = "menu", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "date_time",}, name = "menu_unique_datetime_idx")})
+@Table(name = "menu", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "created", "dish_id"}, name = "menu_unique_datetime_dish_idx")})
 public class Menu extends BaseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -30,7 +30,7 @@ public class Menu extends BaseEntity implements Serializable {
     private Restaurant restaurant;
 
     @NotNull
-    @Column(name = "date", nullable = false, columnDefinition = "date default now()")
+    @Column(name = "created", nullable = false, columnDefinition = "date default now()")
     private LocalDate date;
 
     @NotNull
