@@ -21,7 +21,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class MenuTo extends BaseTo{
+public class MenuTo extends BaseTo {
     @NotNull
     private Restaurant restaurant;
 
@@ -34,7 +34,8 @@ public class MenuTo extends BaseTo{
     @NotNull
     private Integer price;
 
-    public MenuTo(@NotNull Restaurant restaurant, @NotNull LocalDate date, @NotNull Dish dish, @NotNull Integer price) {
+    public MenuTo(Integer id, @NotNull Restaurant restaurant, @NotNull LocalDate date, @NotNull Dish dish, @NotNull Integer price) {
+        super(id);
         this.restaurant = restaurant;
         this.date = date;
         this.dish = dish;

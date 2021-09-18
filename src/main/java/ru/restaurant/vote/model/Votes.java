@@ -44,23 +44,13 @@ public class Votes extends BaseEntity implements Serializable {
 
 
     public Votes(Votes votes) {
-        this(votes.getId(), votes.getDate());
-        this.setRestaurant(votes.getRestaurant());
-        this.setUser(votes.getUser());
+        this(votes.getId(), votes.getDate(), votes.getUser(), votes.getRestaurant());
     }
 
-    public Votes(LocalDate date) {
-        this(null, date);
-    }
-
-    public Votes(Integer id, LocalDate date) {
-        super(id);
-        this.date = date;
-    }
-
-    public Votes(Integer id, LocalDate date, User user) {
+    public Votes(Integer id, LocalDate date, User user, Restaurant restaurant) {
         super(id);
         this.date = date;
         this.user = user;
+        this.restaurant = restaurant;
     }
 }

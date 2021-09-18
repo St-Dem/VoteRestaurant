@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import ru.restaurant.vote.model.Restaurant;
+import ru.restaurant.vote.model.User;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -19,23 +21,18 @@ public class VotesTo extends BaseTo {
     private LocalDate date;
 
     @NotNull
-    private int userId;
+    private User user;
 
     @NotNull
-    private int restaurantId;
+    private Restaurant restaurant;
 
-    public VotesTo(int userId, LocalDate date) {
-        this(null, date);
-    }
 
-    public VotesTo(Integer id, LocalDate date, int userId, int restaurantId) {
-        this(id, date);
-        this.userId = userId;
-        this.restaurantId = restaurantId;
-    }
-
-    public VotesTo(Integer id, LocalDate date) {
+    public VotesTo(Integer id, LocalDate date, User user, Restaurant restaurant) {
         super(id);
         this.date = date;
+        this.user = user;
+        this.restaurant = restaurant;
     }
+
+
 }
