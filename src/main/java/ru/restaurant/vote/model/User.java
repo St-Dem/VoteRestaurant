@@ -1,6 +1,7 @@
 package ru.restaurant.vote.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -61,7 +62,7 @@ public class User extends NamedEntity implements HasIdAndEmail, Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @OrderBy("date DESC")
-    @JsonIgnore
+    @JsonManagedReference
     protected List<Votes> votes;
 
     public User(User u) {

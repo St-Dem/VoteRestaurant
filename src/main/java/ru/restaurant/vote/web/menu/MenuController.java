@@ -2,18 +2,22 @@ package ru.restaurant.vote.web.menu;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import ru.restaurant.vote.model.Menu;
 import ru.restaurant.vote.repository.MenuRepository;
+import ru.restaurant.vote.to.MenuTo;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
 import static ru.restaurant.vote.util.CreateUtil.create;
+import static ru.restaurant.vote.util.MenuUtil.asTo;
 import static ru.restaurant.vote.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.restaurant.vote.web.SecurityUtil.authId;
 
@@ -27,15 +31,28 @@ public class MenuController {
     private final MenuRepository menuRepository;
 
     @GetMapping("/today")
-    public List<Menu> getTodayMenu() {
+    public List<MenuTo> getTodayMenu() {
         log.info("get today Menu");
-        return menuRepository.getAllByDate(LocalDate.now());
+        return asTo(menuRepository.getAllByDate(LocalDate.now()));
     }
 
     @GetMapping("/{id}")
     public Menu get(@PathVariable int id) {
         log.info("get menuById {} ", id);
         return menuRepository.getMenuById(id);
+    }
+
+    @GetMapping("/date")
+    public List<Menu> getMenuByDate(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate date) {
+        log.info("get menuByDate {}  user {}", date, authId());
+        return menuRepository.getAllByDate(date);
+    }
+
+    @GetMapping("/dateBetween")
+    public List<Menu> getMenuBetweenDate(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate startDate,
+                                         @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate endDate){
+        log.info("get menu between {} and {}", startDate, endDate);
+        return menuRepository.getAllByDateBetweenOrderByDate(startDate, endDate);
     }
 
     @DeleteMapping("/{id}")
@@ -60,7 +77,7 @@ public class MenuController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Menu menu, @PathVariable int id) {
-        log.info("update {} with id={} user {}", menu, id, authId());
+        log.info("update {} with id {} user {}", menu, id, authId());
         assureIdConsistent(menu, id);
         menuRepository.save(menu);
     }

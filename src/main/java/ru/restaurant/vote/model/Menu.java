@@ -1,5 +1,8 @@
 package ru.restaurant.vote.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -9,20 +12,20 @@ import javax.validation.constraints.NotNull;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @ToString(callSuper = true, exclude = {"restaurant", "dish"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@NamedEntityGraph(name = Menu.RESTAURANT_AND_DISH,
-        attributeNodes = {@NamedAttributeNode("restaurant"), @NamedAttributeNode("dish")})
-@Table(name = "menu", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "created", "dish_id"}, name = "menu_unique_datetime_dish_idx")})
+@Table(name = "menu", uniqueConstraints = {@UniqueConstraint(columnNames = {"created", "restaurant_id"}, name = "menu_unique_restaurant_date_idx")})
 public class Menu extends BaseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    public static final String RESTAURANT_AND_DISH = "Menu.restaurantDish";
 
+    @JsonBackReference
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -33,25 +36,28 @@ public class Menu extends BaseEntity implements Serializable {
     @Column(name = "created", nullable = false, columnDefinition = "date default now()")
     private LocalDate date;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "dish_id", nullable = false)
-    private Dish dish;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
+    @JsonManagedReference
+    private List<Dish> dish;
 
-    @NotNull
-    @Column(name = "price", nullable = false)
-    private Integer price;
-
-    public Menu(Integer id, Restaurant restaurant, LocalDate localDate, Dish dish, int price) {
+    public Menu(Integer id, Restaurant restaurant, LocalDate localDate, Dish ...dishes) {
         super(id);
         this.restaurant = restaurant;
         this.date = localDate;
-        this.price = price;
-        this.dish = dish;
+        this.dish = Arrays.asList(dishes);
     }
 
     public Menu(Menu menu) {
-        this(menu.getId(), menu.getRestaurant(), menu.getDate(), menu.getDish(), menu.getPrice());
+        super(menu.id);
+        this.restaurant = menu.getRestaurant();
+        this.date = menu.getDate();
+        this.dish = menu.getDish();
+    }
+
+    public Menu(Integer id, Restaurant restaurant, LocalDate localDate, List<Dish> dishes) {
+        super(id);
+        this.restaurant = restaurant;
+        this.date = localDate;
+        this.dish = dishes;
     }
 }

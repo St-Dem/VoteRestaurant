@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.restaurant.vote.model.Votes;
 import ru.restaurant.vote.repository.VotesRepository;
+import ru.restaurant.vote.to.VotesTo;
 import ru.restaurant.vote.util.validation.InvalidTime;
 import ru.restaurant.vote.web.SecurityUtil;
 
@@ -16,7 +17,9 @@ import java.util.List;
 
 import static ru.restaurant.vote.util.CreateUtil.create;
 import static ru.restaurant.vote.util.InvalidTimeUtil.beforeInvalidTime;
+import static ru.restaurant.vote.util.VotesUtil.asTo;
 import static ru.restaurant.vote.util.validation.ValidationUtil.assureIdConsistent;
+import static ru.restaurant.vote.web.SecurityUtil.authId;
 
 @RestController
 @RequestMapping(value = VotesController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -30,7 +33,7 @@ public class VotesController {
     @GetMapping("/{id}")
     public Votes get(@PathVariable int id) {
         log.info("get votesById {} ", id);
-        return votesRepository.getVotesByUserIdAndId(SecurityUtil.authId(), id);
+        return votesRepository.getVotesByUserIdAndId(authId(), id);
     }
 
     @DeleteMapping("/{id}")
@@ -44,6 +47,13 @@ public class VotesController {
     public List<Votes> getAll() {
         log.info("get all votes");
         return votesRepository.findAll();
+    }
+
+    @GetMapping("/user")
+    public List<VotesTo> getWithUser() {
+        int authId = authId();
+        log.info("get all votes for user {}", authId);
+        return asTo(votesRepository.getAllByUserId(authId));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

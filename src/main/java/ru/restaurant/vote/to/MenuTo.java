@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -29,16 +30,12 @@ public class MenuTo extends BaseTo {
     private LocalDate date;
 
     @NotNull
-    private Dish dish;
+    private List<Dish> dish;
 
-    @NotNull
-    private Integer price;
-
-    public MenuTo(Integer id, @NotNull Restaurant restaurant, @NotNull LocalDate date, @NotNull Dish dish, @NotNull Integer price) {
+    public MenuTo(Integer id, @NotNull Restaurant restaurant, @NotNull LocalDate date, List<Dish> dish) {
         super(id);
         this.restaurant = restaurant;
         this.date = date;
         this.dish = dish;
-        this.price = price;
     }
 }
