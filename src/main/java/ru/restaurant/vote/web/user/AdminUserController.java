@@ -19,6 +19,7 @@ import java.util.List;
 
 import static ru.restaurant.vote.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.restaurant.vote.util.validation.ValidationUtil.checkNew;
+import static ru.restaurant.vote.web.URLPattern.ADMIN_URL;
 
 @RestController
 @RequestMapping(value = AdminUserController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -26,7 +27,7 @@ import static ru.restaurant.vote.util.validation.ValidationUtil.checkNew;
 @CacheConfig(cacheNames = "users")
 public class AdminUserController extends AbstractUserController {
 
-    static final String REST_URL = "/api/admin/users";
+    static final String REST_URL = ADMIN_URL + "/users";
 
     @Override
     @GetMapping("/{id}")

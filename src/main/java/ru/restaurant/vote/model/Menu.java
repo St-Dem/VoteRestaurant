@@ -37,6 +37,7 @@ public class Menu extends BaseEntity implements Serializable {
     private LocalDate date;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonManagedReference
     private List<Dish> dish;
 

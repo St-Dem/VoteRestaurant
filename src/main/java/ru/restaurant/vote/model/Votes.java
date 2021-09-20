@@ -31,10 +31,9 @@ public class Votes extends BaseEntity implements Serializable {
     private LocalDate date;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonBackReference
     private User user;
 
 

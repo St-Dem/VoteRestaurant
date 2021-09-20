@@ -28,4 +28,8 @@ public class UserUtil {
         user.setEmail(user.getEmail().toLowerCase());
         return user;
     }
+
+    public static UserTo createNewFromUser(User user){
+        return new UserTo(user.id(), user.getName(), user.getEmail(), user.getPassword());
+    }
 }

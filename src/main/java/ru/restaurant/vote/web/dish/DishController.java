@@ -15,13 +15,14 @@ import java.util.List;
 import static ru.restaurant.vote.util.CreateUtil.create;
 import static ru.restaurant.vote.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.restaurant.vote.web.SecurityUtil.authId;
+import static ru.restaurant.vote.web.URLPattern.ADMIN_URL;
 
 @RestController
 @RequestMapping(value = DishController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @AllArgsConstructor
 public class DishController {
-    public static final String REST_URL = "/api/dishes";
+    public static final String REST_URL = ADMIN_URL + "/dishes";
 
     private final DishRepository dishRepository;
 

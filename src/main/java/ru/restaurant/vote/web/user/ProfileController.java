@@ -19,6 +19,9 @@ import ru.restaurant.vote.util.validation.ValidationUtil;
 import javax.validation.Valid;
 import java.net.URI;
 
+import static ru.restaurant.vote.util.validation.ValidationUtil.assureIdConsistent;
+import static ru.restaurant.vote.util.validation.ValidationUtil.checkNew;
+
 @RestController
 @RequestMapping(value = ProfileController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
@@ -42,7 +45,7 @@ public class ProfileController extends AbstractUserController {
     @CacheEvict(allEntries = true)
     public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
         log.info("register {}", userTo);
-        ValidationUtil.checkNew(userTo);
+        checkNew(userTo);
         User created = prepareAndSave(UserUtil.createNewFromTo(userTo));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL).build().toUri();
@@ -54,7 +57,7 @@ public class ProfileController extends AbstractUserController {
     @Transactional
     @CacheEvict(allEntries = true)
     public void update(@RequestBody @Valid UserTo userTo, @AuthenticationPrincipal AuthUser authUser) {
-        ValidationUtil.assureIdConsistent(userTo, authUser.id());
+        assureIdConsistent(userTo, authUser.id());
         User user = authUser.getUser();
         prepareAndSave(UserUtil.updateFromTo(user, userTo));
     }

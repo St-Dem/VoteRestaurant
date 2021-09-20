@@ -20,4 +20,10 @@ public class MenuUtil {
                 .map(MenuUtil::menuAsTo)
                 .collect(Collectors.toList());
     }
+
+    public static List<Menu> toAsMenu(List<MenuTo> menusTo) {
+        return menusTo.stream()
+                .map(MenuUtil::menuToAsMenu)
+                .collect(Collectors.toList());
+    }
 }

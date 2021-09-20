@@ -4,6 +4,8 @@ package ru.restaurant.vote.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -30,11 +32,13 @@ public class Restaurant extends NamedEntity implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("date DESC")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private List<Votes> votes;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("date DESC")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private List<Menu> menu;
 

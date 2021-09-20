@@ -1,5 +1,6 @@
 package ru.restaurant.vote.to;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
@@ -21,6 +22,7 @@ public class UserTo extends NamedTo implements HasIdAndEmail {
     String email;
 
     @NotBlank
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Size(min = 5, max = 32)
     String password;
 
