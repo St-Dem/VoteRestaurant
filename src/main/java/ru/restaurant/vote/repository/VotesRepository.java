@@ -36,5 +36,6 @@ public interface VotesRepository extends BaseRepository<Votes> {
     List<Votes> getAllByDateBetweenOrderByDate(LocalDate startDate, LocalDate endDate);
 
     @EntityGraph(attributePaths = {"restaurant", "user"},  type = EntityGraph.EntityGraphType.LOAD)
+    @Query("SELECT v FROM Votes v ORDER BY v.date DESC")
     List<Votes> findAll();
 }
