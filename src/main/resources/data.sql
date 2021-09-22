@@ -28,7 +28,7 @@ VALUES ('fat food', 100, 1),
        ('bad food', 50, 1),
        ('meat', 300, 4),
        ('fat food', 100, 5),
-       ('fat food', 100, 6),
+       ('fat food', 90, 6),
        ('engineer food', 250, 6);
 
 INSERT INTO VOTES (created, user_id, restaurant_id)
@@ -36,5 +36,4 @@ VALUES ('2021-09-01', 1, 1),
        ('2021-09-02', 2, 3),
        ('2021-09-03', 1, 2),
        ('2021-09-01', 2, 1),
-       (CURRENT_DATE, 1, 1),
-       (CURRENT_DATE,  2, 2);
+       (CURRENT_DATE, 2, 2);

@@ -28,7 +28,6 @@ public class Dish extends NamedEntity implements Serializable {
     private Integer price;
 
     @JsonBackReference
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "menu_id", nullable = false)
@@ -42,5 +41,10 @@ public class Dish extends NamedEntity implements Serializable {
 
     public Dish(Dish dish) {
         this(dish.getId(), dish.getName(), dish.getPrice(), dish.getMenu());
+    }
+
+    public Dish(Integer id, String name, int price) {
+        super(id, name);
+        this.price = price;
     }
 }
