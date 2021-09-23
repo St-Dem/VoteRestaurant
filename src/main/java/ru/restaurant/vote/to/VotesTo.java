@@ -1,10 +1,7 @@
 package ru.restaurant.vote.to;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import ru.restaurant.vote.model.Restaurant;
 import ru.restaurant.vote.model.User;
 
@@ -17,6 +14,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class VotesTo extends BaseTo implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -30,7 +28,6 @@ public class VotesTo extends BaseTo implements Serializable {
 
     @NotNull
     private Restaurant restaurant;
-
 
     public VotesTo(Integer id, LocalDate date, User user, Restaurant restaurant) {
         super(id);

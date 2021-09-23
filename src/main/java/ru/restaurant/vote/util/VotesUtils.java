@@ -33,7 +33,7 @@ public class VotesUtils {
     }
 
     public static VotesDto voteAsDto(Votes votes){
-        return new VotesDto(votes.id(), votes.getDate(), createDtoFromUser(votes.getUser()), votes.getRestaurant());
+        return new VotesDto(votes.getId(), votes.getDate(), createDtoFromUser(votes.getUser()), votes.getRestaurant());
     }
 
     public static List<VotesDto> asDto(List<Votes> votes){

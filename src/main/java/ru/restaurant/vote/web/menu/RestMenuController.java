@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import ru.restaurant.vote.repository.MenuRepository;
 import ru.restaurant.vote.to.MenuTo;
@@ -29,7 +28,7 @@ public class RestMenuController {
     @GetMapping("/today")
     public List<MenuTo> getTodayMenu() {
         log.info("get today Menu");
-        return asTo(menuRepository.getAllByDate(LocalDate.now()));
+        return asTo(menuRepository.getAllByDateBetweenOrderByDate(LocalDate.now(), LocalDate.now()));
     }
 
     @GetMapping("/{id}")
@@ -38,15 +37,9 @@ public class RestMenuController {
         return menuAsTo(menuRepository.getById(id));
     }
 
-    @GetMapping("/date")
-    public List<MenuTo> getMenuByDate(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        log.info("get menuByDate {}  user {}", date, authId());
-        return asTo(menuRepository.getAllByDate(date));
-    }
-
     @GetMapping("/dateBetween")
-    public List<MenuTo> getMenuBetweenDate(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                           @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+    public List<MenuTo> getMenuBetweenDate(@RequestParam  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                           @RequestParam  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         log.info("get menu between {} and {}", startDate, endDate);
         return asTo(menuRepository.getAllByDateBetweenOrderByDate(startDate, endDate));
     }

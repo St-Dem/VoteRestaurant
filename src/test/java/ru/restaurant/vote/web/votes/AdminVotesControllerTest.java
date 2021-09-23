@@ -1,4 +1,4 @@
-package ru.restaurant.vote.web.dish;
+package ru.restaurant.vote.web.votes;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,25 +7,31 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.restaurant.vote.model.Dish;
-import ru.restaurant.vote.repository.DishRepository;
+import ru.restaurant.vote.model.Votes;
+import ru.restaurant.vote.repository.VotesRepository;
 import ru.restaurant.vote.to.DishTo;
 import ru.restaurant.vote.util.JsonUtil;
 import ru.restaurant.vote.web.AbstractControllerTest;
+import ru.restaurant.vote.web.menu.RestMenuController;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.restaurant.vote.util.DishUtil.dishAsTo;
-import static ru.restaurant.vote.web.dish.DishController.REST_URL;
-import static ru.restaurant.vote.web.dish.DishTestData.*;
+import static ru.restaurant.vote.web.menu.MenuTestData.MENU_MATCHER;
+import static ru.restaurant.vote.web.menu.MenuTestData.menuBetween;
+import static ru.restaurant.vote.web.votes.AdminVotesController.REST_URL;
 import static ru.restaurant.vote.web.user.UserTestData.ADMIN_MAIL;
 import static ru.restaurant.vote.web.user.UserTestData.USER_MAIL;
+import static ru.restaurant.vote.web.votes.VotesTestData.*;
 
-public class DishControllerTest extends AbstractControllerTest {
+public class AdminVotesControllerTest extends AbstractControllerTest {
 
     @Autowired
-    DishRepository dishRepository;
+    VotesRepository votesRepository;
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
@@ -34,7 +40,7 @@ public class DishControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DishTestData.DISH_MATCHER.contentJson(dishList));
+                .andExpect(VOTES_MATCHER.contentJson(listVotes));
     }
 
     @Test
@@ -57,49 +63,18 @@ public class DishControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DishTestData.DISH_MATCHER.contentJson(dish2));
+                .andExpect(VOTES_MATCHER.contentJson(votes2));
     }
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
-    void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL + "/" + DISH_DELETE_ID))
+    void getVotesBetweenDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(RestMenuController.REST_URL + "/dateBetween")
+                .param("startDate", "2021-09-01")
+                .param("endDate", String.valueOf(LocalDate.now().minusDays(1))))
+                .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(status().isNoContent());
-        assertFalse(dishRepository.findById(DISH_DELETE_ID).isPresent());
-    }
-
-    @Test
-    @WithUserDetails(value = ADMIN_MAIL)
-    void createWithLocation() throws Exception {
-        Dish newDish = getNew();
-        DishTo newTo = dishAsTo(newDish);
-
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(newTo)))
-                .andExpect(status().isCreated());
-
-        Dish created = DISH_MATCHER.readFromJson(action);
-        int newId = created.id();
-        newDish.setId(newId);
-        DISH_MATCHER.assertMatch(created, newDish);
-        DISH_MATCHER.assertMatch(dishRepository.getById(newId), newDish);
-    }
-
-    @Test
-    @WithUserDetails(value = ADMIN_MAIL)
-    void update() throws Exception {
-        Dish updated = getUpdated();
-        updated.setPrice(333);
-        DishTo updatedTo = dishAsTo(updated);
-
-        perform(MockMvcRequestBuilders.put(REST_URL + "/" + updatedTo.id())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(updatedTo)))
-                .andDo(print())
-                .andExpect(status().isNoContent());
-
-        DishTestData.DISH_MATCHER.assertMatch(dishRepository.getById(updated.id()), updated);
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(VOTES_MATCHER.contentJson(listBetween));
     }
 }

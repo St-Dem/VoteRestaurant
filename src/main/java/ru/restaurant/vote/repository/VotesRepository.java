@@ -15,8 +15,6 @@ import static ru.restaurant.vote.model.Votes.RESTAURANT;
 
 @Transactional(readOnly = true)
 public interface VotesRepository extends BaseRepository<Votes> {
-    Votes getById(Integer id);
-
     @EntityGraph(RESTAURANT)
     List<Votes> getAllByUserId(int userId);
 
@@ -34,8 +32,4 @@ public interface VotesRepository extends BaseRepository<Votes> {
 
     @EntityGraph(attributePaths = {"restaurant", "user"},  type = EntityGraph.EntityGraphType.LOAD)
     List<Votes> getAllByDateBetweenOrderByDate(LocalDate startDate, LocalDate endDate);
-
-    @EntityGraph(attributePaths = {"restaurant", "user"},  type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT v FROM Votes v ORDER BY v.date DESC")
-    List<Votes> findAll();
 }

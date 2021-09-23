@@ -36,6 +36,6 @@ public class DishTestData {
     }
 
     public static Dish getUpdated() {
-        return new Dish(DISH_ID + 9, "UpdatedName", 888, menu1);
+        return dish3;
     }
 }

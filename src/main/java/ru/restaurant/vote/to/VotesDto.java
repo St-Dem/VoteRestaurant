@@ -1,9 +1,6 @@
 package ru.restaurant.vote.to;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import ru.restaurant.vote.model.Restaurant;
 
 import javax.validation.constraints.NotNull;
@@ -15,6 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class VotesDto extends BaseTo implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

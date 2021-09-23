@@ -86,7 +86,7 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void update() throws Exception {
-        Restaurant updated = third_restaurant;
+        Restaurant updated = getUpdated();
         updated.setAddress("Menlo Park, California, USA");
 
         perform(MockMvcRequestBuilders.put(REST_URL + "/" + THIRD_RESTAURANT_ID)

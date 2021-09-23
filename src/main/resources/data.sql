@@ -33,7 +33,7 @@ VALUES ('fat food', 100, 1),
 
 INSERT INTO VOTES (created, user_id, restaurant_id)
 VALUES ('2021-09-01', 1, 1),
+       ('2021-09-01', 2, 1),
        ('2021-09-02', 2, 3),
        ('2021-09-03', 1, 2),
-       ('2021-09-01', 2, 1),
        (CURRENT_DATE, 2, 2);

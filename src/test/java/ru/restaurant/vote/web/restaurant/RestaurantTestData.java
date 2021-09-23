@@ -32,6 +32,6 @@ public class RestaurantTestData {
     }
 
     public static Restaurant getUpdated() {
-        return new Restaurant(FIRST_RESTAURANT_ID + 3, "UpdatedName",  "Новый Уренгой");
+        return third_restaurant;
     }
 }

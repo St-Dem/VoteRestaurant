@@ -23,8 +23,4 @@ public interface MenuRepository extends BaseRepository<Menu> {
 
     @EntityGraph(attributePaths = {"restaurant", "dish"}, type = EntityGraph.EntityGraphType.LOAD)
     List<Menu> getAllByDateBetweenOrderByDate(LocalDate begin, LocalDate end);
-
-    @EntityGraph(attributePaths = {"restaurant", "dish"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query(value = "SELECT m FROM Menu m  WHERE m.date=:date  ORDER BY m.restaurant.name DESC")
-    List<Menu> getAllByDate(@Param("date")LocalDate localDate);
 }

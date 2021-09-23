@@ -35,6 +35,6 @@ public class UserUtil {
     }
 
     public static UserDto createDtoFromUser(User user){
-        return new UserDto(user.id(), user.getName(), user.getEmail());
+        return new UserDto(user.getId(), user.getName(), user.getEmail());
     }
 }
