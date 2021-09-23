@@ -9,13 +9,16 @@ import ru.restaurant.vote.model.Restaurant;
 import ru.restaurant.vote.model.User;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class VotesTo extends BaseTo {
+public class VotesTo extends BaseTo implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @NotNull

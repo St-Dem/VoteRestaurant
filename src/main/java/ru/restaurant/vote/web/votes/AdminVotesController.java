@@ -21,7 +21,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
-import static ru.restaurant.vote.util.VotesUtil.asDto;
+import static ru.restaurant.vote.util.VotesUtils.asDto;
 import static ru.restaurant.vote.web.SecurityUtil.authId;
 import static ru.restaurant.vote.web.URLPattern.ADMIN_URL;
 

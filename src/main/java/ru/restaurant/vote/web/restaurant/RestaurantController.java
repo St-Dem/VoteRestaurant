@@ -28,20 +28,20 @@ public class RestaurantController {
 
     @GetMapping("/{id}")
     public Restaurant get(@PathVariable int id) {
-        log.info("get dishById {} ", id);
+        log.info("get restaurantById {} ", id);
         return restaurantRepository.findById(id).orElse(null);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
-        log.info("delete dish {} user {}", id, authId());
+        log.info("delete restaurant {} user {}", id, authId());
         restaurantRepository.delete(id);
     }
 
     @GetMapping
     public List<Restaurant> getAll() {
-        log.info("get all dishes");
+        log.info("get all restaurants");
         return restaurantRepository.findAll();
     }
 

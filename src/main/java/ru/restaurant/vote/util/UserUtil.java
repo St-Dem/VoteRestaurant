@@ -5,6 +5,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.restaurant.vote.model.Role;
 import ru.restaurant.vote.model.User;
+import ru.restaurant.vote.to.UserDto;
 import ru.restaurant.vote.to.UserTo;
 
 @UtilityClass
@@ -31,5 +32,9 @@ public class UserUtil {
 
     public static UserTo createNewFromUser(User user){
         return new UserTo(user.id(), user.getName(), user.getEmail(), user.getPassword());
+    }
+
+    public static UserDto createDtoFromUser(User user){
+        return new UserDto(user.id(), user.getName(), user.getEmail());
     }
 }

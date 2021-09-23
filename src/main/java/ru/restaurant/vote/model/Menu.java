@@ -36,6 +36,7 @@ public class Menu extends BaseEntity implements Serializable {
     @Column(name = "created", nullable = false, columnDefinition = "date default now()")
     private LocalDate date;
 
+    @NotNull
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonManagedReference

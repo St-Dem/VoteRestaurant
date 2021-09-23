@@ -26,8 +26,8 @@ import java.util.List;
 
 import static ru.restaurant.vote.util.InvalidTimeUtil.INVALID_TIME;
 import static ru.restaurant.vote.util.InvalidTimeUtil.beforeInvalidTime;
-import static ru.restaurant.vote.util.VotesUtil.voteAsTo;
-import static ru.restaurant.vote.util.VotesUtil.asTo;
+import static ru.restaurant.vote.util.VotesUtils.voteAsTo;
+import static ru.restaurant.vote.util.VotesUtils.asTo;
 import static ru.restaurant.vote.web.SecurityUtil.authId;
 import static ru.restaurant.vote.web.URLPattern.URL;
 

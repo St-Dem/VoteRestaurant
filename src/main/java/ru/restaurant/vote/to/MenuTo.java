@@ -15,6 +15,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,7 +24,10 @@ import java.util.List;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class MenuTo extends BaseTo {
+public class MenuTo extends BaseTo implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @NotNull
     private Restaurant restaurant;
 

@@ -15,18 +15,16 @@ import java.io.Serializable;
 @Setter
 @Entity
 @ToString(callSuper = true, exclude = "menu")
-@NamedEntityGraph(name = Dish.MENU_DISH,
-        attributeNodes = @NamedAttributeNode("menu"))
 @Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "menu_id"}, name = "dish_unique_name_menu_idx")})
 public class Dish extends NamedEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    public static final String MENU_DISH = "Dish.menu";
 
     @NotNull
     @Column(name = "price", nullable = false)
     private Integer price;
 
+    @NotNull
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -40,11 +38,6 @@ public class Dish extends NamedEntity implements Serializable {
     }
 
     public Dish(Dish dish) {
-        this(dish.getId(), dish.getName(), dish.getPrice(), dish.getMenu());
-    }
-
-    public Dish(Integer id, String name, int price) {
-        super(id, name);
-        this.price = price;
+        this(dish.id(), dish.getName(), dish.getPrice(), dish.getMenu());
     }
 }
