@@ -1,6 +1,5 @@
 package ru.restaurant.vote.web.dish;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -9,7 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.restaurant.vote.model.Dish;
-import ru.restaurant.vote.repository.DishRepository;
 import ru.restaurant.vote.to.DishTo;
 
 import javax.validation.Valid;
@@ -24,7 +22,7 @@ import static ru.restaurant.vote.web.URLPattern.ADMIN_URL;
 @RequestMapping(value = DishController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @CacheConfig(cacheNames = "dishes")
-public class DishController extends AbstractDishController{
+public class DishController extends AbstractDishController {
     public static final String REST_URL = ADMIN_URL + "/dishes";
 
     @GetMapping("/{id}")

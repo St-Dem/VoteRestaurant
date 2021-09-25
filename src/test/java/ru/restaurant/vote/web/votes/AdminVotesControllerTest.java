@@ -4,28 +4,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.restaurant.vote.model.Dish;
-import ru.restaurant.vote.model.Votes;
 import ru.restaurant.vote.repository.VotesRepository;
-import ru.restaurant.vote.to.DishTo;
-import ru.restaurant.vote.util.JsonUtil;
 import ru.restaurant.vote.web.AbstractControllerTest;
 import ru.restaurant.vote.web.menu.RestMenuController;
 
 import java.time.LocalDate;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.restaurant.vote.web.menu.MenuTestData.MENU_MATCHER;
-import static ru.restaurant.vote.web.menu.MenuTestData.menuBetween;
-import static ru.restaurant.vote.web.votes.AdminVotesController.REST_URL;
 import static ru.restaurant.vote.web.user.UserTestData.ADMIN_MAIL;
 import static ru.restaurant.vote.web.user.UserTestData.USER_MAIL;
+import static ru.restaurant.vote.web.votes.AdminVotesController.REST_URL;
 import static ru.restaurant.vote.web.votes.VotesTestData.*;
 
 public class AdminVotesControllerTest extends AbstractControllerTest {

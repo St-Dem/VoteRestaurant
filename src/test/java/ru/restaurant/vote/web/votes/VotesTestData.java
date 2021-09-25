@@ -15,16 +15,17 @@ public class VotesTestData {
     public static final MatcherFactory.Matcher<Votes> VOTES_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Votes.class, "user", "restaurant");
 
     public static final int FIRST_VOTES_ID = 1;
-    public static final int FIVE_VOTES_ID = 1 +3;
+    public static final int FIVE_VOTES_ID = 1 + 4;
 
     public static final Votes votes1 = new Votes(FIRST_VOTES_ID, CREATED, user, first_restaurant);
     public static final Votes votes2 = new Votes(FIRST_VOTES_ID + 1, CREATED, admin, first_restaurant);
     public static final Votes votes3 = new Votes(FIRST_VOTES_ID + 2, LocalDate.of(2021, 9, 2), admin, third_restaurant);
-    public static final Votes votes4 = new Votes(FIRST_VOTES_ID +3, LocalDate.of(2021, 9, 3), user, second_restaurant);
+    public static final Votes votes4 = new Votes(FIRST_VOTES_ID + 3, LocalDate.of(2021, 9, 3), user, second_restaurant);
     public static final Votes votes5 = new Votes(FIVE_VOTES_ID, LocalDate.now(), admin, second_restaurant);
 
-    public static final List<Votes> listVotes = List.of(votes1, votes2, votes3, votes4 ,votes5);
+    public static final List<Votes> listVotes = List.of(votes1, votes2, votes3, votes4, votes5);
     public static final List<Votes> listBetween = List.of(votes1, votes2, votes3, votes4);
+    public static final List<Votes> listUserBetween = List.of(votes1, votes4);
 
 
     public static Votes getNew() {
@@ -32,6 +33,6 @@ public class VotesTestData {
     }
 
     public static Votes getUpdated() {
-        return new Votes(FIRST_VOTES_ID + 5, LocalDate.now(), user, second_restaurant);
+        return votes5;
     }
 }

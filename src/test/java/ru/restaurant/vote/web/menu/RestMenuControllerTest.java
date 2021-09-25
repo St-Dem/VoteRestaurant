@@ -4,9 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.restaurant.vote.model.Menu;
 import ru.restaurant.vote.repository.MenuRepository;
 import ru.restaurant.vote.web.AbstractControllerTest;
 

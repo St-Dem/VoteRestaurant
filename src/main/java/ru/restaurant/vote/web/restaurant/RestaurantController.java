@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.webjars.NotFoundException;
 import ru.restaurant.vote.model.Restaurant;
 import ru.restaurant.vote.repository.RestaurantRepository;
 
@@ -29,7 +30,7 @@ public class RestaurantController {
     @GetMapping("/{id}")
     public Restaurant get(@PathVariable int id) {
         log.info("get restaurantById {} ", id);
-        return restaurantRepository.findById(id).orElse(null);
+        return restaurantRepository.findById(id).orElseThrow(() -> new NotFoundException("restaurant not found"));
     }
 
     @DeleteMapping("/{id}")

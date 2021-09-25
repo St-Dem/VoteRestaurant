@@ -13,7 +13,6 @@ import java.util.List;
 
 import static ru.restaurant.vote.util.MenuUtil.asTo;
 import static ru.restaurant.vote.util.MenuUtil.menuAsTo;
-import static ru.restaurant.vote.web.SecurityUtil.authId;
 import static ru.restaurant.vote.web.URLPattern.URL;
 
 @RestController
@@ -38,8 +37,8 @@ public class RestMenuController {
     }
 
     @GetMapping("/dateBetween")
-    public List<MenuTo> getMenuBetweenDate(@RequestParam  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                           @RequestParam  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+    public List<MenuTo> getMenuBetweenDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         log.info("get menu between {} and {}", startDate, endDate);
         return asTo(menuRepository.getAllByDateBetweenOrderByDate(startDate, endDate));
     }

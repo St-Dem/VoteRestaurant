@@ -1,12 +1,8 @@
 package ru.restaurant.vote.web.dish;
 
-import org.assertj.core.util.Arrays;
 import ru.restaurant.vote.model.Dish;
-import ru.restaurant.vote.to.DishTo;
 import ru.restaurant.vote.web.MatcherFactory;
-import ru.restaurant.vote.web.menu.MenuTestData;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static ru.restaurant.vote.web.menu.MenuTestData.*;

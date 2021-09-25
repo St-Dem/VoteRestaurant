@@ -10,14 +10,15 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.webjars.NotFoundException;
+import ru.restaurant.vote.error.IllegalRequestDataException;
+import ru.restaurant.vote.model.Restaurant;
 import ru.restaurant.vote.model.Votes;
 import ru.restaurant.vote.repository.RestaurantRepository;
 import ru.restaurant.vote.repository.VotesRepository;
 import ru.restaurant.vote.to.VotesTo;
 import ru.restaurant.vote.util.validation.FoundException;
-import ru.restaurant.vote.util.validation.InvalidTime;
 import ru.restaurant.vote.web.AuthUser;
+import ru.restaurant.vote.web.SecurityUtil;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -26,8 +27,8 @@ import java.util.List;
 
 import static ru.restaurant.vote.util.InvalidTimeUtil.INVALID_TIME;
 import static ru.restaurant.vote.util.InvalidTimeUtil.beforeInvalidTime;
-import static ru.restaurant.vote.util.VotesUtils.voteAsTo;
 import static ru.restaurant.vote.util.VotesUtils.asTo;
+import static ru.restaurant.vote.util.VotesUtils.voteAsTo;
 import static ru.restaurant.vote.web.SecurityUtil.authId;
 import static ru.restaurant.vote.web.URLPattern.URL;
 
@@ -43,14 +44,16 @@ public class RestVotesController {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@AuthenticationPrincipal AuthUser authUser) {
-        log.info("delete votes for user {} ", authUser.id());
-        Votes deleteVotes = votesRepository.getVotesByUserIdAndDate(authUser.id(), LocalDate.now())
-                .orElseThrow(() -> new NotFoundException("Vote not found"));
+    public void delete() {
+        int id = SecurityUtil.authId();
+        log.info("delete votes for user {} ", id);
+        Votes deleteVotes = votesRepository.getVotesByUserIdAndDate(id, LocalDate.now())
+                .orElseThrow(() -> new IllegalRequestDataException("Vote not found"));
+
         if (beforeInvalidTime()) {
-            votesRepository.delete(deleteVotes.id());
+            votesRepository.delete(deleteVotes);
         } else {
-            throw new InvalidTime("You late");
+            throw new IllegalRequestDataException("You late");
         }
     }
 
@@ -75,7 +78,7 @@ public class RestVotesController {
     }
 
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     public ResponseEntity<Votes> createWithLocation(@AuthenticationPrincipal AuthUser authUser, @RequestParam int restaurantId) {
         int id = authUser.id();
         log.info("create votes for user {}", id);
@@ -92,18 +95,21 @@ public class RestVotesController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@AuthenticationPrincipal AuthUser authUser, @RequestParam int restaurantId) {
-        int id = authUser.id();
-        log.info("update votes {} for user {}", restaurantId, id);
-        Votes newVotes = votesRepository.getVotesByUserIdAndDate(id, LocalDate.now())
-                .orElseThrow(() -> new NotFoundException("Vote not found"));
+        int userId = authUser.id();
+        log.info("update vote for user {}, restaurant {}", userId, restaurantId);
 
         if (beforeInvalidTime()) {
-            votesRepository.save(new Votes(newVotes.id(), LocalDate.now(), authUser.getUser(), restaurantRepository.getById(restaurantId)));
+            Votes newVotes = votesRepository.getVotesByUserIdAndDate(userId, LocalDate.now())
+                    .orElseThrow(() -> new IllegalRequestDataException("Vote not found"));
+            Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                    .orElseThrow(() -> new IllegalRequestDataException("Restaurant not found"));
+            newVotes.setRestaurant(restaurant);
+            votesRepository.save(newVotes);
         } else {
-            throw new InvalidTime("You late");
+            throw new IllegalRequestDataException("You late");
         }
     }
 }

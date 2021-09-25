@@ -1,7 +1,5 @@
 package ru.restaurant.vote.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +19,6 @@ import java.time.LocalDate;
 @Setter
 @ToString(callSuper = true, exclude = {"user", "restaurant"})
 @Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "created"}, name = "votes_unique_user_date_idx")})
-@NamedEntityGraph(name = Votes.RESTAURANT,  attributeNodes = @NamedAttributeNode("restaurant"))
 public class Votes extends BaseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

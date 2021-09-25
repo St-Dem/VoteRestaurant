@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.restaurant.vote.util.UserUtil.createDtoFromUser;
-import static ru.restaurant.vote.util.UserUtil.createNewFromUser;
 
 public class VotesUtils {
 
@@ -26,18 +25,18 @@ public class VotesUtils {
                 .collect(Collectors.toList());
     }
 
-    public static List<Votes> toAsVotes(List<VotesTo> votesTo){
+    public static List<Votes> toAsVotes(List<VotesTo> votesTo) {
         return votesTo.stream()
                 .map((VotesUtils::voteToAsVote))
                 .collect(Collectors.toList());
     }
 
-    public static VotesDto voteAsDto(Votes votes){
+    public static VotesDto voteAsDto(Votes votes) {
         return new VotesDto(votes.getId(), votes.getDate(), createDtoFromUser(votes.getUser()), votes.getRestaurant());
     }
 
-    public static List<VotesDto> asDto(List<Votes> votes){
-     return votes.stream()
+    public static List<VotesDto> asDto(List<Votes> votes) {
+        return votes.stream()
                 .map(VotesUtils::voteAsDto)
                 .collect(Collectors.toList());
     }

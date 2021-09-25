@@ -1,7 +1,6 @@
 package ru.restaurant.vote.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -42,7 +41,7 @@ public class Menu extends BaseEntity implements Serializable {
     @JsonManagedReference
     private List<Dish> dish;
 
-    public Menu(Integer id, Restaurant restaurant, LocalDate localDate, Dish ...dishes) {
+    public Menu(Integer id, Restaurant restaurant, LocalDate localDate, Dish... dishes) {
         super(id);
         this.restaurant = restaurant;
         this.date = localDate;

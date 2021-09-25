@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import ru.restaurant.vote.model.Menu;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.io.Serial;
 import java.io.Serializable;
@@ -33,7 +31,7 @@ public class DishTo extends NamedTo implements Serializable {
         this.menuId = menuId;
     }
 
-    public DishTo(String name, int price, int menuId){
+    public DishTo(String name, int price, int menuId) {
         this(null, name, price, menuId);
     }
 }
