@@ -15,5 +15,5 @@ If it is after 11:00 then it is too late, vote can't be changed
 Each restaurant provides a new menu each day.
 
 Documentation:
-Run RestaurantVotingApplication
-Put http://localhost:8080/swagger-ui.html using browser
+Run RestaurantVotingApplication.
+Put http://localhost:8080/swagger-ui.html using browser.
