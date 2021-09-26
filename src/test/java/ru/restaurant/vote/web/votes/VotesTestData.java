@@ -1,6 +1,7 @@
 package ru.restaurant.vote.web.votes;
 
 import ru.restaurant.vote.model.Votes;
+import ru.restaurant.vote.to.VotesTo;
 import ru.restaurant.vote.web.MatcherFactory;
 
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ import static ru.restaurant.vote.web.user.UserTestData.user;
 
 public class VotesTestData {
     public static final MatcherFactory.Matcher<Votes> VOTES_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Votes.class, "user", "restaurant");
+public static final MatcherFactory.Matcher<VotesTo> VOTES_TO_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(VotesTo.class, "user", "restaurant");
 
     public static final int FIRST_VOTES_ID = 1;
     public static final int FIVE_VOTES_ID = 1 + 4;

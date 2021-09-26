@@ -20,7 +20,7 @@ public interface VotesRepository extends BaseRepository<Votes> {
     List<Votes> getVotesByUserIdAndDateBetweenOrderByDate(int userId, LocalDate startDate, LocalDate endDate);
 
     @EntityGraph(attributePaths = {"restaurant", "user"}, type = EntityGraph.EntityGraphType.LOAD)
-    Votes getVotesByUserIdAndId(int userId, Integer id);
+    Optional<Votes> getVotesByUserIdAndId(int userId, Integer id);
 
     @EntityGraph(attributePaths = {"restaurant", "user"}, type = EntityGraph.EntityGraphType.LOAD)
     List<Votes> getAllByDate(LocalDate localDate);

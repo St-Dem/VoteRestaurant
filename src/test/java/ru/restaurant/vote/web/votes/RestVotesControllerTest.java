@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.restaurant.vote.model.Votes;
 import ru.restaurant.vote.repository.VotesRepository;
+import ru.restaurant.vote.to.VotesTo;
 import ru.restaurant.vote.web.AbstractControllerTest;
 
 import java.time.LocalDate;
@@ -20,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.restaurant.vote.util.InvalidTimeUtil.alwaysValid;
 import static ru.restaurant.vote.util.InvalidTimeUtil.beforeInvalidTime;
+import static ru.restaurant.vote.util.VotesUtils.voteAsTo;
 import static ru.restaurant.vote.web.restaurant.RestaurantTestData.FIRST_RESTAURANT_ID;
 import static ru.restaurant.vote.web.restaurant.RestaurantTestData.first_restaurant;
 import static ru.restaurant.vote.web.user.UserTestData.ADMIN_MAIL;
@@ -74,44 +76,60 @@ public class RestVotesControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     void delete() throws Exception {
         if (beforeInvalidTime()) {
-            perform(MockMvcRequestBuilders.delete(REST_URL))
+            perform(MockMvcRequestBuilders.delete(REST_URL)
+            .param("id", "5"))
                     .andExpect(status().isNoContent());
 
             assertFalse(votesRepository.findById(FIVE_VOTES_ID).isPresent());
         } else {
-            perform(MockMvcRequestBuilders.delete(REST_URL))
+            perform(MockMvcRequestBuilders.delete(REST_URL)
+                    .param("id", "5"))
                     .andDo(print())
                     .andExpect(status().isUnprocessableEntity())
                     .andExpect(content().string(containsString("You late")));
         }
     }
 
-
     @Test
     @WithUserDetails(value = USER_MAIL)
     void deleteNotFound() throws Exception {
         alwaysValid();
 
-        perform(MockMvcRequestBuilders.delete(REST_URL))
+        perform(MockMvcRequestBuilders.delete(REST_URL)
+                .param("id", "5"))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string(containsString("Vote not found")));
+                        .andExpect(content().string(containsString("Vote not found")));
     }
 
     @Test
     @WithUserDetails(value = USER_MAIL)
     void createWithLocation() throws Exception {
         Votes newVotes = getNew();
+        VotesTo newVotesTo = voteAsTo(newVotes);
 
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .param("restaurantId", "1"))
                 .andExpect(status().isCreated());
 
-        Votes created = VOTES_MATCHER.readFromJson(action);
+        VotesTo created = VOTES_TO_MATCHER.readFromJson(action);
         int newId = created.id();
         newVotes.setId(newId);
+        newVotesTo.setId(newId);
+        newVotesTo.setUser(null);
 
-        VOTES_MATCHER.assertMatch(created, newVotes);
+        VOTES_TO_MATCHER.assertMatch(created, newVotesTo);
         VOTES_MATCHER.assertMatch(votesRepository.getById(newId), newVotes);
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void createFound() throws Exception {
+        Votes newVotes = votes5;
+
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+                .param("restaurantId", "1"))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().string(containsString("You voted today")));
     }
 
     @Test

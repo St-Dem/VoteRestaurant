@@ -16,16 +16,12 @@ import ru.restaurant.vote.model.Votes;
 import ru.restaurant.vote.repository.RestaurantRepository;
 import ru.restaurant.vote.repository.VotesRepository;
 import ru.restaurant.vote.to.VotesTo;
-import ru.restaurant.vote.util.validation.FoundException;
 import ru.restaurant.vote.web.AuthUser;
-import ru.restaurant.vote.web.SecurityUtil;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
-import static ru.restaurant.vote.util.InvalidTimeUtil.INVALID_TIME;
 import static ru.restaurant.vote.util.InvalidTimeUtil.beforeInvalidTime;
 import static ru.restaurant.vote.util.VotesUtils.asTo;
 import static ru.restaurant.vote.util.VotesUtils.voteAsTo;
@@ -44,14 +40,14 @@ public class RestVotesController {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete() {
-        int id = SecurityUtil.authId();
-        log.info("delete votes for user {} ", id);
-        Votes deleteVotes = votesRepository.getVotesByUserIdAndDate(id, LocalDate.now())
-                .orElseThrow(() -> new IllegalRequestDataException("Vote not found"));
+    public void delete(@AuthenticationPrincipal AuthUser authUser, @RequestParam int id) {
+        int userId = authUser.id();
+        log.info("delete votes {} for user {} ", id, userId);
 
         if (beforeInvalidTime()) {
-            votesRepository.delete(deleteVotes);
+            votesRepository.getVotesByUserIdAndId(userId, id)
+                    .orElseThrow(() -> new IllegalRequestDataException("Vote not found"));
+            votesRepository.delete(id);
         } else {
             throw new IllegalRequestDataException("You late");
         }
@@ -74,25 +70,30 @@ public class RestVotesController {
     @GetMapping("/{id}")
     public VotesTo get(@PathVariable int id) {
         log.info("get votesById {} ", id);
-        return voteAsTo(votesRepository.getVotesByUserIdAndId(authId(), id));
+        return voteAsTo(votesRepository.getVotesByUserIdAndId(authId(), id)
+                .orElseThrow(() -> new IllegalRequestDataException("Votes not found")));
     }
 
 
     @PostMapping
-    public ResponseEntity<Votes> createWithLocation(@AuthenticationPrincipal AuthUser authUser, @RequestParam int restaurantId) {
+    public ResponseEntity<VotesTo> createWithLocation(@AuthenticationPrincipal AuthUser authUser, @RequestParam int restaurantId) {
         int id = authUser.id();
         log.info("create votes for user {}", id);
 
         Votes newVotes = votesRepository.getVotesByUserIdAndDate(id, LocalDate.now()).orElse(null);
-        if (newVotes != null && LocalTime.now().isAfter(INVALID_TIME)) {
-            throw new FoundException("You late");
+
+        if (newVotes != null) {
+            throw new IllegalRequestDataException("You voted today");
         }
-        Votes created = votesRepository.save(new Votes(null, LocalDate.now(), authUser.getUser(), restaurantRepository.getById(restaurantId)));
+
+        Votes created = votesRepository.save(new Votes(null, LocalDate.now(), authUser.getUser(), restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new IllegalRequestDataException("Restaurant not found"))));
+        VotesTo createdTo = voteAsTo(created);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
-                .buildAndExpand(created.getId()).toUri();
-        return ResponseEntity.created(uriOfNewResource).body(created);
+                .buildAndExpand(createdTo.getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(createdTo);
     }
 
     @PutMapping

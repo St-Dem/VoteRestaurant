@@ -1,5 +1,6 @@
 package ru.restaurant.vote.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,7 +33,6 @@ public class Votes extends BaseEntity implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
-
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
